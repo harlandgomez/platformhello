@@ -20,7 +20,7 @@ module acr 'modules/acr.bicep' = {
   name: 'acrDeployment'
   params: {
     location: location
-    acrName: 'platformsre-acr' // Make sure this name is globally unique
+    acrName: 'platformsreacr'
   }
 }
 
