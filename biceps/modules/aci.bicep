@@ -2,7 +2,7 @@ param aciName string
 param location string = resourceGroup().location
 param containerImage string
 param containerPort int
-param subnetId string // This will be passed from the main Bicep file
+param subnetId string
 
 resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01' = {
   name: aciName
@@ -30,7 +30,7 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01'
     osType: 'Linux'
     ipAddress: {
       type: 'Public'
-      dnsNameLabel: '${aciName}-dns' // Provides a DNS name to access the container publicly
+      dnsNameLabel: '${aciName}-dns'
       ports: [
         {
           protocol: 'TCP'
@@ -38,7 +38,12 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01'
         }
       ]
     }
-    subnetIds: [ subnetId ]
+    subnetIds: [
+      {
+        id: subnetId
+        name: 'aciSubtnet'
+      }
+    ]
   }
 }
 

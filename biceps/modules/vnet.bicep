@@ -1,7 +1,7 @@
-// VNet module: vnet.bicep
+// Inside vnet.bicep
 
 param vnetName string
-param location string
+param location string = resourceGroup().location
 param addressSpace string
 param subnets array
 

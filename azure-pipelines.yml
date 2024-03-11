@@ -16,7 +16,7 @@ jobs:
   steps:
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: '$(System.DefaultWorkingDirectory)/azdo/biceps'
+      PathtoPublish: '$(System.DefaultWorkingDirectory)/biceps'
       artifactName: $(bicepArtifactName)
     displayName: 'publish biceps to Azure DevOps - $(bicepArtifactName)'          
 - deployment: Deploy
