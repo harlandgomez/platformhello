@@ -8,6 +8,9 @@ param subnetName string
 resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01' = {
   name: aciName
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     containers: [
       {
