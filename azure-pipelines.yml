@@ -31,7 +31,7 @@ jobs:
           displayName: 'Deploy Biceps files'        
           inputs:
             deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: proton-account-svc-conn
+            azureResourceManagerConnection: proton-account-svc-conn-01
             subscriptionId: 'd7ab4684-6d5e-4bd3-a6c5-93965b7c0cdc'
             action: 'Create Or Update Resource Group'
             resourceGroupName: 'platformsre-rg'
