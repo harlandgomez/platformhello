@@ -26,6 +26,13 @@ jobs:
     runOnce:
       deploy:
         steps:
+        - task: AzureCLI@2
+          inputs:
+            azureSubscription: 'proton-account-svc-conn-01'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az group show --name platformsre-rg
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Deploy Biceps files'        
           inputs:
