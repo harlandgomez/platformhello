@@ -1,6 +1,6 @@
 param aciName string
 param location string = resourceGroup().location
-param containerImage string
+param containerImage string = 'mcr.microsoft.com/azuredocs/aci-helloworld'
 param containerPort int
 param subnetId string
 param subnetName string
@@ -8,9 +8,6 @@ param subnetName string
 resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01' = {
   name: aciName
   location: location
-  identity: {
-    type: 'SystemAssigned'
-  }
   properties: {
     containers: [
       {

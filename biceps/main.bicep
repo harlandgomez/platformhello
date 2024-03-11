@@ -31,7 +31,6 @@ module aci 'modules/aci.bicep' = {
     location: location
     subnetId: '${vnet.outputs.vnetId}/subnets/default'
     subnetName: 'aciSubtnet'
-    containerImage: 'samplewebimage:latest'
     containerPort: 8080
   }
 }
