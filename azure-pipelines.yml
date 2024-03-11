@@ -34,7 +34,7 @@ jobs:
             subscriptionId: 'd7ab4684-6d5e-4bd3-a6c5-93965b7c0cdc'
             action: 'Create Or Update Resource Group'
             resourceGroupName: 'platformsre-rg'
-            location: 'norwayeast'
+            location: 'swedencentral'
             templateLocation: 'Linked artifact'
             csmFile: '$(Build.ArtifactStagingDirectory)/$(bicepArtifactName)/main.bicep'
             deploymentMode: 'Incremental'
