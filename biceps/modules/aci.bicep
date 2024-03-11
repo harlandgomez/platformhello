@@ -3,6 +3,7 @@ param location string = resourceGroup().location
 param containerImage string
 param containerPort int
 param subnetId string
+param subnetName string
 
 resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01' = {
   name: aciName
@@ -31,10 +32,8 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01'
     subnetIds: [
       {
         id: subnetId
-        name: 'aciSubtnet'
+        name: subnetName
       }
     ]
   }
 }
-
-output subnetName string = containerGroup.properties.subnetIds[0].name

@@ -1,10 +1,8 @@
 param location string = resourceGroup().location
 param vnetName string = 'yourVnetName'
 param gatewaySubnetName string = 'yourGatewaySubnetName'
-param aciSubnetName string = 'yourAciSubnetName'
 param applicationGatewayName string = 'yourAppGatewayName'
 param publicIpName string = 'yourPublicIpName'
-param aciName string = 'yourAciName'
 param backendPoolName string = 'aciBackendPool'
 
 // Public IP Address for the Application Gateway
