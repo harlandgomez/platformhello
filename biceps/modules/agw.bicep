@@ -9,8 +9,11 @@ param backendPoolName string = 'aciBackendPool'
 resource publicIp 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
   name: publicIpName
   location: location
+  sku: {
+    name: 'Standard'
+  }
   properties: {
-    publicIPAllocationMethod: 'Dynamic'
+    publicIPAllocationMethod: 'Static'
   }
 }
 
