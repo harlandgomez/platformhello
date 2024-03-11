@@ -26,13 +26,6 @@ jobs:
     runOnce:
       deploy:
         steps:
-        - task: AzureCLI@2
-          inputs:
-            azureSubscription: 'proton-account-svc-conn-01'
-            scriptType: 'bash'
-            scriptLocation: 'inlineScript'
-            inlineScript: |
-              az group show --name platformsre-rg
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Deploy Biceps files'        
           inputs:
@@ -43,7 +36,7 @@ jobs:
             resourceGroupName: 'platformsre-rg'
             location: 'swedencentral'
             templateLocation: 'Linked artifact'
-            csmFile: '$(Build.ArtifactStagingDirectory)/$(bicepArtifactName)/main.bicep'
+            csmFile: '$(Pipeline.Workspace)/$(bicepArtifactName)/main.bicep'
             deploymentMode: 'Incremental'
 
 
