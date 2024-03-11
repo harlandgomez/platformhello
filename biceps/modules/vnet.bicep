@@ -16,14 +16,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-03-01' = {
       name: subnet.name
       properties: {
         addressPrefix: subnet.addressPrefix
-        delegations: [
-          {
-            name: subnet.delegationName
-            properties: {
-              serviceName: subnet.delegationServiceName
-            }
-          }
-        ]
+        delegations: subnet.delegations ?? []
       }
     }]
   }

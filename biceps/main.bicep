@@ -11,14 +11,19 @@ module vnet 'modules/vnet.bicep' = {
       {
         name: 'default'
         addressPrefix: '10.0.0.0/24'
-        delegationName: 'aciDelegation'
-        delegationServiceName: 'Microsoft.ContainerInstance/containerGroups'
+        delegations: [
+          {
+            name: 'aciDelegation'
+            properties: {
+              serviceName: 'Microsoft.ContainerInstance/containerGroups'
+            }
+          }
+        ]
       }
       {
         name: 'platformsre-subnetgw'
         addressPrefix: '10.0.1.0/24'
-        delegationName: 'agwDelegation'
-        delegationServiceName: 'Microsoft.Network/applicationGateways' }
+      }
     ]
   }
 }
