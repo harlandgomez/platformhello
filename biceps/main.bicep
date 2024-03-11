@@ -27,7 +27,7 @@ module acr 'modules/acr.bicep' = {
 module aci 'modules/aci.bicep' = {
   name: 'aciDeployment'
   params: {
-    aciName: 'sampleWebContainerInstance'
+    aciName: 'sampleweb-ci'
     location: location
     subnetId: '${vnet.outputs.vnetId}/subnets/default'
     containerImage: 'samplewebimage:latest'
