@@ -1,5 +1,3 @@
-// Inside vnet.bicep
-
 param vnetName string
 param location string = resourceGroup().location
 param addressSpace string
@@ -20,9 +18,9 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-03-01' = {
         addressPrefix: subnet.addressPrefix
         delegations: [
           {
-            name: 'aciDelegation'
+            name: subnet.delegationName
             properties: {
-              serviceName: 'Microsoft.ContainerInstance/containerGroups'
+              serviceName: subnet.delegationServiceName
             }
           }
         ]
