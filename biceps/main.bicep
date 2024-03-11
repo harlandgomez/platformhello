@@ -23,6 +23,7 @@ module vnet 'modules/vnet.bicep' = {
       {
         name: 'platformsre-subnetgw'
         addressPrefix: '10.0.1.0/24'
+        delegations: []
       }
     ]
   }
