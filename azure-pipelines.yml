@@ -4,11 +4,39 @@ trigger:
 pool:
   name: Default
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  name: bicepArtifactName
+  value: bicep
 
-- script: |
-    echo test newly created self-hosted buildagent
-  displayName: 'Run a multi-line script'
+jobs:
+- job: Build
+  workspace:
+    clean: all    
+  displayName: 'Publish bicep to artifact'  
+  steps:
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(System.DefaultWorkingDirectory)/azdo/biceps'
+      artifactName: $(bicepArtifactName)
+    displayName: 'publish biceps to Azure DevOps - $(bicepArtifactName)'          
+- deployment: Deploy
+  dependsOn: Build 
+  displayName: 'Deploy To Azure'
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Deploy Biceps files'        
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: proton-account-svc-conn
+            subscriptionId: 'd7ab4684-6d5e-4bd3-a6c5-93965b7c0cdc'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: 'platformsre-rg'
+            location: 'swedencentral'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(Build.ArtifactStagingDirectory)/$(bicepArtifactName)/main.bicep'
+            deploymentMode: 'Incremental'
+
 
