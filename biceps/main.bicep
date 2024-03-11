@@ -30,7 +30,20 @@ module aci 'modules/aci.bicep' = {
     aciName: 'sampleweb-ci'
     location: location
     subnetId: '${vnet.outputs.vnetId}/subnets/default'
+    subnetName: 'aciSubtnet'
     containerImage: 'samplewebimage:latest'
     containerPort: 8080
+  }
+}
+
+module agw 'modules/agw.bicep' = {
+  name: 'agwDeployment'
+  params: {
+    location: location
+    vnetName: 'platformsre-vnet-01'
+    gatewaySubnetName: 'platformsre-subnetgw'
+    applicationGatewayName: 'platformsre-agw'
+    publicIpName: 'platformsre-publicip'
+    backendPoolName: 'aciBackendPool'
   }
 }

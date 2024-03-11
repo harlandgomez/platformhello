@@ -28,16 +28,6 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01'
       }
     ]
     osType: 'Linux'
-    ipAddress: {
-      type: 'Public'
-      dnsNameLabel: '${aciName}-dns'
-      ports: [
-        {
-          protocol: 'TCP'
-          port: containerPort
-        }
-      ]
-    }
     subnetIds: [
       {
         id: subnetId
@@ -47,5 +37,4 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2023-05-01'
   }
 }
 
-// Output the FQDN for accessing the ACI
-output fqdn string = containerGroup.properties.ipAddress.fqdn
+output subnetName string = containerGroup.properties.subnetIds[0].name
