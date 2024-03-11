@@ -24,10 +24,6 @@ resource applicationGateway 'Microsoft.Network/applicationGateways@2023-04-01' =
       tier: 'Standard_v2'
       capacity: 2
     }
-    autoscaleConfiguration: {
-      minCapacity: 0
-      maxCapacity: 10
-    }
     gatewayIPConfigurations: [
       {
         name: 'appGatewayIpConfig'
