@@ -10,6 +10,7 @@ variables:
   imageName: 'sampleweb'
   imageTag: 'latest'
   dockerRegistryServiceConnection: 'proton-account-docker-conn-01'
+  resourceGroupName: 'platformsre-rg'
 
 jobs:
 - job: Build
@@ -42,18 +43,18 @@ jobs:
     runOnce:
       deploy:
         steps:
-        - task: AzureResourceManagerTemplateDeployment@3
-          displayName: 'Deploy Biceps files'        
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: proton-account-svc-conn-01
-            subscriptionId: 'd7ab4684-6d5e-4bd3-a6c5-93965b7c0cdc'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: 'platformsre-rg'
-            location: 'swedencentral'
-            templateLocation: 'Linked artifact'
-            csmFile: '$(Pipeline.Workspace)/$(bicepArtifactName)/main.bicep'
-            deploymentMode: 'Incremental'
+        # - task: AzureResourceManagerTemplateDeployment@3
+        #   displayName: 'Deploy Biceps files'        
+        #   inputs:
+        #     deploymentScope: 'Resource Group'
+        #     azureResourceManagerConnection: proton-account-svc-conn-01
+        #     subscriptionId: 'd7ab4684-6d5e-4bd3-a6c5-93965b7c0cdc'
+        #     action: 'Create Or Update Resource Group'
+        #     resourceGroupName: $(resourceGroupName)
+        #     location: 'swedencentral'
+        #     templateLocation: 'Linked artifact'
+        #     csmFile: '$(Pipeline.Workspace)/$(bicepArtifactName)/main.bicep'
+        #     deploymentMode: 'Incremental'
 
         - task: AzureCLI@2
           displayName: 'Deploy Docker container'
