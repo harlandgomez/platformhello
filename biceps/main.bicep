@@ -1,5 +1,8 @@
 @description('Location for resources.')
 param location string = resourceGroup().location
+@secure()
+param acrPassword string
+param acrUserName string
 
 module vnet 'modules/vnet.bicep' = {
   name: 'vnetDeployment'
@@ -45,7 +48,8 @@ module aci 'modules/aci.bicep' = {
     subnetId: '${vnet.outputs.vnetId}/subnets/default'
     subnetName: 'aciSubtnet'
     containerPort: 8080
-    acrPassword: 'JFY8Q~k~jtd6NZMNTiI~eTGnUH0ZXWrsLBo_.bdc'
+    acrUsername: acrUserName
+    acrPassword: acrPassword
   }
 }
 

@@ -5,14 +5,19 @@ pool:
   name: Default
 
 variables:
-  bicepArtifactName: biceps
-  dockerRegistryUrl: 'platformsreacr.azurecr.io'
-  imageName: 'sampleweb'
-  imageTag: 'latest'
-  dockerRegistryServiceConnection: 'proton-account-docker-conn-01'
-  resourceGroupName: 'platformsre-rg'
-  acrUsername: 'fbf448d4-e1c4-46c6-88ac-8d740cf857ad'
-  acrPassword: 'JFY8Q~k~jtd6NZMNTiI~eTGnUH0ZXWrsLBo_.bdc'
+- group: platformsre-test
+- name: bicepArtifactName
+  value: biceps
+- name: dockerRegistryUrl
+  value: 'platformsreacr.azurecr.io'
+- name: imageName
+  value: 'sampleweb'
+- name: imageTag
+  value: 'latest'
+- name: dockerRegistryServiceConnection
+  value: 'proton-account-docker-conn-01'
+- name: resourceGroupName
+  value: 'platformsre-rg'
 
 jobs:
 - job: Build
@@ -45,18 +50,21 @@ jobs:
     runOnce:
       deploy:
         steps:
-        # - task: AzureResourceManagerTemplateDeployment@3
-        #   displayName: 'Deploy Biceps files'        
-        #   inputs:
-        #     deploymentScope: 'Resource Group'
-        #     azureResourceManagerConnection: proton-account-svc-conn-01
-        #     subscriptionId: 'd7ab4684-6d5e-4bd3-a6c5-93965b7c0cdc'
-        #     action: 'Create Or Update Resource Group'
-        #     resourceGroupName: $(resourceGroupName)
-        #     location: 'swedencentral'
-        #     templateLocation: 'Linked artifact'
-        #     csmFile: '$(Pipeline.Workspace)/$(bicepArtifactName)/main.bicep'
-        #     deploymentMode: 'Incremental'
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Deploy Biceps files'        
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: proton-account-svc-conn-01
+            subscriptionId: 'd7ab4684-6d5e-4bd3-a6c5-93965b7c0cdc'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: $(resourceGroupName)
+            location: 'swedencentral'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(Pipeline.Workspace)/$(bicepArtifactName)/main.bicep'
+            overrideParameters: |- 
+              -acrUserName $(acrUsername)
+              -acrPassword $(acrPassword)           
+            deploymentMode: 'Incremental'
 
         - task: AzureCLI@2
           displayName: 'Deploy Docker container'
@@ -65,7 +73,6 @@ jobs:
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
-              # Check if the container group exists
               EXISTS=$(az container show --name sampleweb-ci --resource-group $(resourceGroupName) --query "name" --output tsv 2>/dev/null)
               
               if [ ! -z "$EXISTS" ]; then

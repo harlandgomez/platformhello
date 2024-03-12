@@ -5,7 +5,7 @@ param containerPort int
 param subnetId string
 param subnetName string
 param acrLoginServer string = 'platformsreacr.azurecr.io'
-param acrUsername string = 'fbf448d4-e1c4-46c6-88ac-8d740cf857ad'
+param acrUsername string
 @secure()
 param acrPassword string
 
