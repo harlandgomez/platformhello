@@ -45,6 +45,7 @@ module aci 'modules/aci.bicep' = {
     subnetId: '${vnet.outputs.vnetId}/subnets/default'
     subnetName: 'aciSubtnet'
     containerPort: 8080
+    acrPassword: 'JFY8Q~k~jtd6NZMNTiI~eTGnUH0ZXWrsLBo_.bdc'
   }
 }
 
