@@ -58,9 +58,11 @@ jobs:
             location: 'swedencentral'
             templateLocation: 'Linked artifact'
             csmFile: '$(Pipeline.Workspace)/$(bicepArtifactName)/main.bicep'
-            overrideParameters: |- 
-              -acrUserName "$(acrUsername)"
-              -acrPassword "$(acrPassword)"           
+            overrideParameters: >-
+              {
+                "acrUserName": "$(acrUsername)",
+                "acrPassword": "$(acrPassword)"
+              }   
             deploymentMode: 'Incremental'
 
         - task: AzureCLI@2
