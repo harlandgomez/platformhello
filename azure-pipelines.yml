@@ -11,6 +11,8 @@ variables:
   imageTag: 'latest'
   dockerRegistryServiceConnection: 'proton-account-docker-conn-01'
   resourceGroupName: 'platformsre-rg'
+  acrUsername: 'fbf448d4-e1c4-46c6-88ac-8d740cf857ad'
+  acrPassword: 'JFY8Q~k~jtd6NZMNTiI~eTGnUH0ZXWrsLBo_.bdc'
 
 jobs:
 - job: Build
@@ -69,5 +71,8 @@ jobs:
                 --image $(dockerRegistryUrl)/$(imageName):$(imageTag) \
                 --dns-name-label platformsre-sampleweb \
                 --ports 80 \
-                --registry-login-server $(dockerRegistryUrl) 
+                --registry-login-server $(dockerRegistryUrl) \
+                --registry-username $(acrUsername) \
+                --registry-password $(acrPassword)                
+
 
