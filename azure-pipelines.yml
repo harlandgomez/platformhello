@@ -24,7 +24,10 @@ jobs:
       Dockerfile: '**/Dockerfile'
       tags: |
         $(dockerRegistryUrl)/$(imageName):$(imageTag)
-        
+
+  - script: docker tag edc3ac7b9c3e $(dockerRegistryUrl)/$(imageName):$(imageTag)
+    displayName: 'Manually tag the image'
+
   - script: docker images
     displayName: 'List Docker images'
 
