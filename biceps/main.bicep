@@ -1,5 +1,6 @@
 @description('Location for resources.')
 param location string = resourceGroup().location
+@secure()
 param acrPassword string
 param acrUserName string
 

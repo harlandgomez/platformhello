@@ -65,17 +65,25 @@ jobs:
         #       }   
         #     deploymentMode: 'Incremental'
         - task: AzureCLI@2
-          displayName: 'Deploy with Azure CLI'
+          displayName: 'Deploy Biceps with Azure CLI'                
           inputs:
             azureSubscription: 'proton-account-svc-conn-01'
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
+              EXISTS=$(az container show --name sampleweb-ci --resource-group $(resourceGroupName) --query "id" --output tsv 2>/dev/null)
+              
+              if [ ! -z "$EXISTS" ]; then
+                echo "Container group exists, deleting..."
+                az container delete --name sampleweb-ci --resource-group $(resourceGroupName) --yes
+              fi
+
+              echo "Deploying new container group..."
               az deployment group create \
                 --resource-group $(resourceGroupName) \
                 --template-file $(Pipeline.Workspace)/biceps/main.bicep \
                 --parameters acrUserName=$(acrUsername) acrPassword=$(acrPassword)
-
+          
         - task: AzureCLI@2
           displayName: 'Deploy Docker container'
           inputs:
