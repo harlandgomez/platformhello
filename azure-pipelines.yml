@@ -23,10 +23,6 @@ jobs:
     clean: all    
   displayName: 'Publish bicep to artifact'  
   steps:
-  - script: |
-      echo "Password: $(acrPassword)"
-    displayName: 'Debug Print Username'
-      
   - task: Docker@2
     displayName: 'Build and Push Docker image'
     inputs:
