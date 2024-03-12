@@ -47,23 +47,34 @@ jobs:
     runOnce:
       deploy:
         steps:
-        - task: AzureResourceManagerTemplateDeployment@3
-          displayName: 'Deploy Biceps files'        
+        # - task: AzureResourceManagerTemplateDeployment@3
+        #   displayName: 'Deploy Biceps files'        
+        #   inputs:
+        #     deploymentScope: 'Resource Group'
+        #     azureResourceManagerConnection: proton-account-svc-conn-01
+        #     subscriptionId: 'd7ab4684-6d5e-4bd3-a6c5-93965b7c0cdc'
+        #     action: 'Create Or Update Resource Group'
+        #     resourceGroupName: $(resourceGroupName)
+        #     location: 'swedencentral'
+        #     templateLocation: 'Linked artifact'
+        #     csmFile: '$(Pipeline.Workspace)/$(bicepArtifactName)/main.bicep'
+        #     overrideParameters: >-
+        #       {
+        #         "acrUserName": "$(acrUsername)",
+        #         "acrPassword": "$(acrPassword)"
+        #       }   
+        #     deploymentMode: 'Incremental'
+        - task: AzureCLI@2
+          displayName: 'Deploy with Azure CLI'
           inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: proton-account-svc-conn-01
-            subscriptionId: 'd7ab4684-6d5e-4bd3-a6c5-93965b7c0cdc'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: $(resourceGroupName)
-            location: 'swedencentral'
-            templateLocation: 'Linked artifact'
-            csmFile: '$(Pipeline.Workspace)/$(bicepArtifactName)/main.bicep'
-            overrideParameters: >-
-              {
-                "acrUserName": "$(acrUsername)",
-                "acrPassword": "$(acrPassword)"
-              }   
-            deploymentMode: 'Incremental'
+            azureSubscription: 'proton-account-svc-conn-01'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az deployment group create \
+                --resource-group $(resourceGroupName) \
+                --template-file $(Pipeline.Workspace)/biceps/main.bicep \
+                --parameters acrUserName=$(acrUsername) acrPassword=$(acrPassword)
 
         - task: AzureCLI@2
           displayName: 'Deploy Docker container'
