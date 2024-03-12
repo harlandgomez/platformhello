@@ -65,6 +65,15 @@ jobs:
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
+              # Check if the container group exists
+              EXISTS=$(az container show --name sampleweb-ci --resource-group $(resourceGroupName) --query "name" --output tsv 2>/dev/null)
+              
+              if [ ! -z "$EXISTS" ]; then
+                echo "Container group exists, deleting..."
+                az container delete --name sampleweb-ci --resource-group $(resourceGroupName) --yes
+              fi
+              
+              echo "Creating new container group..."
               az container create \
                 --resource-group $(resourceGroupName) \
                 --name sampleweb-ci \
@@ -73,6 +82,6 @@ jobs:
                 --ports 80 \
                 --registry-login-server $(dockerRegistryUrl) \
                 --registry-username $(acrUsername) \
-                --registry-password $(acrPassword)                
+                --registry-password $(acrPassword)             
 
 
