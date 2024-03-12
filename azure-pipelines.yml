@@ -6,6 +6,10 @@ pool:
 
 variables:
   bicepArtifactName: biceps
+  dockerRegistryUrl: 'platformsreacr.azurecr.io'
+  imageName: 'sampleweb'
+  imageTag: 'latest'
+  dockerRegistryServiceConnection: 'proton-account-docker-conn-01'
 
 jobs:
 - job: Build
@@ -13,11 +17,29 @@ jobs:
     clean: all    
   displayName: 'Publish bicep to artifact'  
   steps:
+  - task: Docker@2
+    displayName: 'Build Docker image'
+    inputs:
+      command: 'build'
+      Dockerfile: '**/Dockerfile'
+      tags: |
+        $(imageName):$(imageTag)
+
+  - task: Docker@2
+    displayName: 'Push Docker image'
+    inputs:
+      command: 'push'
+      repository: '$(dockerRegistryUrl)/$(imageName)'
+      tags: |
+        $(imageTag)
+      dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)  
+
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: '$(System.DefaultWorkingDirectory)/biceps'
       artifactName: $(bicepArtifactName)
-    displayName: 'publish biceps to Azure DevOps - $(bicepArtifactName)'          
+    displayName: 'publish biceps to Azure DevOps - $(bicepArtifactName)'
+
 - deployment: Deploy
   environment: platformsre-test
   dependsOn: Build 
@@ -38,5 +60,19 @@ jobs:
             templateLocation: 'Linked artifact'
             csmFile: '$(Pipeline.Workspace)/$(bicepArtifactName)/main.bicep'
             deploymentMode: 'Incremental'
-
+            
+        - task: AzureCLI@2
+          displayName: 'Deploy Docker container'
+          inputs:
+            azureSubscription: 'proton-account-svc-conn-01'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az container create \
+                --resource-group $(resourceGroupName) \
+                --name sampleweb-ci \
+                --image $(dockerRegistryUrl)/$(imageName):$(imageTag) \
+                --dns-name-label platformsre-sampleweb \
+                --ports 80 \
+                --registry-login-server $(dockerRegistryUrl) 
 

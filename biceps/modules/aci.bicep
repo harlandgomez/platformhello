@@ -1,6 +1,6 @@
 param aciName string
 param location string = resourceGroup().location
-param containerImage string = 'mcr.microsoft.com/azuredocs/aci-helloworld'
+param containerImage string = 'platformsreacr.azurecr.io/sampleweb:latest'
 param containerPort int
 param subnetId string
 param subnetName string
