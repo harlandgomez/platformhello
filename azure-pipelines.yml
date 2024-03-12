@@ -14,8 +14,6 @@ variables:
   value: 'sampleweb'
 - name: imageTag
   value: 'latest'
-- name: dockerRegistryServiceConnection
-  value: 'proton-account-docker-conn-01'
 - name: resourceGroupName
   value: 'platformsre-rg'
 
