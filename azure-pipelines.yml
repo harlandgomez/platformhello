@@ -23,7 +23,8 @@ jobs:
       command: 'build'
       Dockerfile: '**/Dockerfile'
       tags: |
-        $(imageName):$(imageTag)
+        $(dockerRegistryUrl)/$(imageName):$(imageTag)
+
 
   - task: Docker@2
     displayName: 'Push Docker image'
@@ -60,7 +61,7 @@ jobs:
             templateLocation: 'Linked artifact'
             csmFile: '$(Pipeline.Workspace)/$(bicepArtifactName)/main.bicep'
             deploymentMode: 'Incremental'
-            
+
         - task: AzureCLI@2
           displayName: 'Deploy Docker container'
           inputs:
